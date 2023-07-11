@@ -1,0 +1,82 @@
+# FloatingPortal
+
+Portals the floating element into a given container element — by
+default, outside of the app root and into the body.
+
+```js
+import {FloatingPortal} from '@floating-ui/react';
+
+function Tooltip() {
+  return (
+    isOpen && (
+      <FloatingPortal>
+        <div>Floating element</div>
+      </FloatingPortal>
+    )
+  );
+}
+```
+
+Context is provided so that portals nested in one another are
+appended to their respective parent.
+
+## Props
+
+```ts
+interface Props {
+  root?: HTMLElement | null;
+  id?: string;
+  preserveTabOrder?: boolean;
+}
+```
+
+### root
+
+Optionally specifies the root node the portal container will be
+appended to.
+
+```js
+<FloatingPortal root={rootNode} />
+```
+
+### id
+
+Optionally selects the node with the id if it exists, or create
+it and append it to the specified root (by default
+`document.body{:js}`).
+
+```js
+<FloatingPortal id="custom-root-id" />
+```
+
+### preserveTabOrder
+
+default: `true{:js}`
+
+When using non-modal focus management using
+`<FloatingFocusManager />{:js}`, this will preserve the tab order
+context based on the React tree instead of the DOM tree.
+
+```js
+<FloatingPortal preserveTabOrder={false} />
+```
+
+## useFloatingPortalNode
+
+Exposes the portal container node for custom use in other
+components. The hook injects the node, if it does not yet exist
+in the DOM.
+
+```js
+function App() {
+  const portalNode = useFloatingPortalNode({
+    id: 'custom-root-id',
+  });
+
+  if (portalNode) {
+    return ReactDOM.createPortal(<div></div>, portalNode);
+  }
+
+  return null;
+}
+```
